@@ -1,0 +1,28 @@
+menu "Beat Echo"
+    config BE_POWER_SETTLE_MS
+        int "Experimental peripheral rail settling policy (milliseconds)"
+        range 1 1000
+        default 100
+        help
+            Project policy, NOT a verified board minimum. Qualify GPIO8 rail,
+            LED logic margin and speaker startup on the actual board before use.
+    config BE_DEFAULT_BPM
+        int "Initial BPM"
+        range 60 160
+        default 90
+    config BE_DEFAULT_DIFFICULTY
+        int "Initial difficulty (0 easy, 1 normal, 2 hard)"
+        range 0 2
+        default 0
+    config BE_VOLUME
+        int "Initial synthesized audio volume percent"
+        range 0 60
+        default 25
+    config BE_INPUT_OFFSET_MS
+        int "Input offset milliseconds (positive subtracts from captured input)"
+        range -200 200
+        default 0
+    config BE_ENCODER_REVERSE
+        bool "Reverse the menu encoder direction"
+        default n
+endmenu

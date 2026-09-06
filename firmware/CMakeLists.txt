@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.20)
+if(DEFINED IDF_TARGET AND NOT IDF_TARGET STREQUAL "esp32s3")
+    message(FATAL_ERROR "Beat Echo targets EasyInput V2.0 / ESP32-S3 only")
+endif()
+set(IDF_TARGET "esp32s3" CACHE STRING "Target SoC")
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(beat_echo)
