@@ -1,0 +1,15 @@
+/build*/
+/dist/
+/.venv*/
+/backups/
+*.partial
+__pycache__/
+*.pyc
+.DS_Store
+/firmware/build/
+/firmware/sdkconfig
+/firmware/sdkconfig.old
+/firmware/managed_components/
+/web/beat_echo.wasm
+/web/index.html
+*.wav

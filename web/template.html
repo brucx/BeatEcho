@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Beat Echo 节拍回声：先听节奏，再用八键复现。与 ESP32-S3 固件共用 C++ 引擎的离线试玩版。">
+<title>Beat Echo · 节拍回声</title>
+<style>{{CSS}}</style>
+</head>
+<body>
+<div class="shell">
+<header><a class="brand" href="#" aria-label="Beat Echo 首页"><span class="brand-mark">b<span>e</span></span><div>BEAT ECHO<small>节拍回声</small></div></a><div class="status"><span class="dot"></span><span id="engine-status">正在载入引擎</span></div></header>
+<main>
+<section class="intro"><div class="eyebrow">LISTEN. REMEMBER. ECHO.</div><h1>先听，<br>再回声<span>。</span></h1><p class="intro-copy">把一小段节奏，变成你的肌肉记忆。<br>八个鼓垫，三条生命，十二关挑战。</p><div class="tags"><span>离线运行</span><span>原创合成音色</span><span>C++ / WASM</span></div>
+<div class="how"><div><b>01</b><p><strong>听一遍</strong><small>预备四拍后，记住示范的鼓点。</small></p></div><div><b>02</b><p><strong>等四拍</strong><small>准备灯亮起，心里保持节拍。</small></p></div><div><b>03</b><p><strong>打回来</strong><small>用相同鼓垫，复现刚才的节奏。</small></p></div></div>
+<p class="hardware-note">为 EasyInput V2.0 设计<br><span>这是虚拟控制面板，不是实板测试。</span></p>
+</section>
+<section class="console" aria-label="节拍回声游戏">
+<div class="console-top"><div class="model">BE / 01 <span>RHYTHM MEMORY MACHINE</span></div><span class="session" id="session-label">CHALLENGE #42</span></div>
+<div class="screen">
+<div class="screen-top"><span id="round-label">ROUND 01 / 12</span><span id="lives" aria-label="剩余三条生命">● ● ●</span></div>
+<div class="screen-center"><div class="phase-label" id="phase-label">READY WHEN YOU ARE</div><h2 id="phase-title">轮到节奏说话。</h2><p id="phase-hint" aria-live="polite">点击下方鼓垫试听，再按「开始挑战」。</p></div>
+<div class="progress"><div id="progress-fill"></div></div>
+<div class="metrics"><div><small>总分</small><strong id="score">000000</strong></div><div><small>连击</small><strong id="combo">—</strong></div><div><small>准确率</small><strong id="accuracy">—</strong></div><div><small>本机最高分</small><strong id="best">000000</strong></div></div>
+</div>
+<div class="beat-row"><div class="beat-lights" aria-label="四拍指示灯"><i></i><i></i><i></i><i></i></div><span class="beat-caption">1 &nbsp; 2 &nbsp; 3 &nbsp; 4</span><div id="judge" class="judge">ECHO</div><i class="feedback-light" id="feedback-light"></i></div>
+<div class="pads" id="pads">
+<button class="pad" data-key="0" aria-label="S1 底鼓，键盘 A"><span>S1 <kbd>A</kbd></span><b>KICK</b><small>底鼓</small></button>
+<button class="pad" data-key="1" aria-label="S2 军鼓，键盘 S"><span>S2 <kbd>S</kbd></span><b>SNARE</b><small>军鼓</small></button>
+<button class="pad" data-key="2" aria-label="S3 闭镲，键盘 D"><span>S3 <kbd>D</kbd></span><b>HI-HAT</b><small>闭镲</small></button>
+<button class="pad" data-key="3" aria-label="S4 拍手，键盘 F"><span>S4 <kbd>F</kbd></span><b>CLAP</b><small>拍手</small></button>
+<button class="pad" data-key="4" aria-label="S5 低通鼓，键盘 J"><span>S5 <kbd>J</kbd></span><b>LOW TOM</b><small>低通鼓</small></button>
+<button class="pad" data-key="5" aria-label="S6 高通鼓，键盘 K"><span>S6 <kbd>K</kbd></span><b>HIGH TOM</b><small>高通鼓</small></button>
+<button class="pad" data-key="6" aria-label="S7 开镲，键盘 L"><span>S7 <kbd>L</kbd></span><b>OPEN HAT</b><small>开镲</small></button>
+<button class="pad" data-key="7" aria-label="S8 吊镲，键盘分号"><span>S8 <kbd>;</kbd></span><b>CRASH</b><small>吊镲</small></button>
+</div>
+<div class="controls"><div class="tempo"><button id="tempo-down" aria-label="降低 BPM">−</button><div><strong id="bpm-value">90</strong><small>BPM</small></div><button id="tempo-up" aria-label="提高 BPM">＋</button></div><label class="difficulty">难度<select id="difficulty"><option value="0">入门 · 四音色</option><option value="1">进阶 · 八分音符</option><option value="2">挑战 · 切分与和弦</option></select></label><button class="start" id="start" disabled>载入中…</button><button class="reset" id="reset" title="Esc：返回菜单" aria-label="放弃本次挑战，返回菜单">↺</button></div>
+<div class="options"><label><input type="checkbox" id="hints" checked>示范时提示鼓垫</label><label>音量<input id="volume" type="range" min="0" max="60" value="40" aria-label="音量"></label><span>空格 开始 / 继续 · Esc 返回</span></div>
+<details><summary>校准与挑战设置</summary><div class="advanced"><label>输入补偿（毫秒）<input type="number" id="offset" min="-200" max="200" value="0" step="5"></label><label>挑战码<input type="number" id="seed" min="1" max="4294967295" value="42"></label></div><p>总是慢拍，可增加正补偿；总是抢拍，可用负补偿。不同挑战码生成不同节奏。入门 / 进阶 / 挑战的过关线为 60% / 70% / 80%。相同难度与挑战码可复现同一套谱面。</p></details>
+<div class="result-detail" id="result-detail" hidden></div>
+<div class="warning" id="warning" role="alert" hidden></div>
+</section>
+</main>
+<footer><span>BEAT ECHO <b>v0.1.0</b></span><span>无账号 · 无上传 · 无外部依赖</span><span>浏览器与固件共用判定核心</span></footer>
+</div>
+<script>const BE_WASM_BASE64="{{WASM}}";</script>
+<script>{{JS}}</script>
+</body></html>
