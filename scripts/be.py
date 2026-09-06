@@ -147,7 +147,7 @@ def package(build_dir: Path, out: Path) -> None:
             entries.append({"name": target.name, "offset": offset, "size": target.stat().st_size,
                             "sha256": digest(target)})
         manifest = {"schema": 1, "board": BOARD, "chip": "esp32s3", "flash_size": FLASH_SIZE,
-                    "idf_version": project.get("idf_ver", "unknown"), "source_commit": commit,
+                    "idf_version": project.get("git_revision", project.get("idf_ver", "unknown")), "source_commit": commit,
                     "created_utc": datetime.now(timezone.utc).isoformat(),
                     "hardware_verified": False, "files": sorted(entries, key=lambda x: x["offset"])}
         (stage / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

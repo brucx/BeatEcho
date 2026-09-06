@@ -232,7 +232,7 @@ class FlashToolsTests(unittest.TestCase):
         for offset, name in be.LAYOUT.items():
             (build / name).write_bytes((self.bundle / name).read_bytes()); mapping[hex(offset)] = name
         (build / "flasher_args.json").write_text(json.dumps({"flash_settings": {"flash_size": "16MB", "flash_mode": "dio"}, "flash_files": mapping}), encoding="utf-8")
-        (build / "project_description.json").write_text(json.dumps({"target": "esp32s3", "project_name": "beat_echo", "idf_ver": "v5.5.5"}), encoding="utf-8")
+        (build / "project_description.json").write_text(json.dumps({"target": "esp32s3", "project_name": "beat_echo", "git_revision": "v5.5.5"}), encoding="utf-8")
         return build
 
     def test_package_roundtrip_includes_tools(self):
@@ -243,6 +243,7 @@ class FlashToolsTests(unittest.TestCase):
             self.assertTrue((out / name).is_file(), name)
         self.assertTrue(Path(str(out)+".zip").is_file())
         self.assertFalse(be.read_json(out / "manifest.json")["hardware_verified"])
+        self.assertEqual(be.read_json(out / "manifest.json")["idf_version"], "v5.5.5")
 
     def test_package_refuses_overwrite(self):
         build = self.build_fixture(); out = self.root / "release"
